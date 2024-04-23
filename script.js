@@ -110,8 +110,8 @@ function resetDB() {
         {
           id: 2,
           name: "Mx. Monkey",
-          image:
-            "",
+          image:"https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDQ2amx0a3JrNW5veXgzNzg0MWZhNXV2OW4yaTB4M2l0ZzJsN3RubiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f3zrSgsuVznamcPpti/giphy.gif",
+            
           votes: 0,
         },
         {
