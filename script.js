@@ -104,14 +104,14 @@ function resetDB() {
         {
           id: 1,
           name: "Mr. Cute",
-          image: "https://thumbs.gfycat.com/EquatorialIckyCat-max-1mb.gif",
+          image: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjdueXNvdng4MGFvaGEzeWZ6dmZ5NW9jNGdmb2VmNzRvd3Fic3c5NCZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/RJEBGVo2mrGxsujtAE/giphy.webp", ,
           votes: 0,
         },
         {
           id: 2,
           name: "Mx. Monkey",
           image:
-            "https://thumbs.gfycat.com/FatalInnocentAmericanshorthair-max-1mb.gif",
+            "",
           votes: 0,
         },
         {
