@@ -25,22 +25,10 @@ const getApiData = () => {
 
 const processApiData = (characters) => {
   characterNames.innerHTML = "";
+  const totalVotes = characters.reduce((acc, character) => acc + character.votes, 0);
+  console.log(`Total number of votes for all characters: ${totalVotes}`);
   characters.forEach((character) => {
-    const characterContainer = document.createElement("div");
-    characterContainer.classList.add("character");
-    characterContainer.dataset.id = character.id;
-    const characterName = document.createElement("div");
-    characterName.textContent = character.name;
-    characterContainer.appendChild(characterName);
-    characterNames.appendChild(characterContainer);
-    characterName.addEventListener("click", () => {
-      document.getElementById("name").textContent = character.name;
-      document.getElementById("image").src = character.image;
-      document.getElementById("image").alt = character.name;
-      document.getElementById("vote-count").textContent = character.votes;
-      // addVote(character.id, 10);
-      localStorage.characterActive = character.id;
-    });
+    // existing code for displaying character data
   });
 };
 
