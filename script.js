@@ -1,166 +1,64 @@
 // Your code here
-const characterNames = document.getElementById("character-bar");
-const votesInput = document.getElementById("votes");
-const apiUrl = "http://localhost:3000/characters";
-const resetData = null;
-const getApiData = () => {
-  fetch(apiUrl)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.table(data);
-    // if (resetData === null || undefined) {
-    // resetData = data;
-    // }
-      processApiData(data);
-    })
-    .catch((error) => {
-      console.error("There was a problem with your fetch operation:", error);
-    });
-};
-
-const processApiData = (characters) => {
-  characterNames.innerHTML = "";
-  const totalVotes = characters.reduce((acc, character) => acc + character.votes, 0);
-  console.log(`Total number of votes for all characters: ${totalVotes}`);
-  characters.forEach((character) => {
-    // existing code for displaying character data
-  });
-};
-
-getApiData();
-const addVote = (characterId, newVote) => {
-  fetch(`${apiUrl}/${characterId}`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((character) => {
-      const totalVotes = character.votes + newVote;
-
-      fetch(`${apiUrl}/${characterId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ votes: totalVotes }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Vote added successfully:", data);
-          getApiData();
-        })
-        .catch((error) => {
-          console.error("There was a problem adding the vote:", error);
-        });
-    })
-    .catch((error) => {
-      console.error("There was a problem fetching the character:", error);
-    });
-    alert("alert")
-};
-const submitCharacterVote = () => {
-  let activeCharacterId = localStorage.characterActive;
-  let characterVote = parseInt(votesInput.value);
-  console.log(activeCharacterId);
-  addVote(activeCharacterId, parseInt(Math.round(characterVote)));
-};
-document
-  .getElementById("votes-form")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
-  });
-function resetDB() {
-  fetch(`${apiUrl}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      characters: [
-        {
-          id: 1,
-          name: "Mr. Cute",
-          image: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZjdueXNvdng4MGFvaGEzeWZ6dmZ5NW9jNGdmb2VmNzRvd3Fic3c5NCZlcD12MV9zdGlja2Vyc19zZWFyY2gmY3Q9cw/RJEBGVo2mrGxsujtAE/giphy.webp", ,
-          votes: 0,
-        },
-        {
-          id: 2,
-          name: "Mx. Monkey",
-          image:"https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExZDQ2amx0a3JrNW5veXgzNzg0MWZhNXV2OW4yaTB4M2l0ZzJsN3RubiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f3zrSgsuVznamcPpti/giphy.gif",
-            
-          votes: 0,
-        },
-        {
-          id: 3,
-          name: "Ms. Zebra",
-          image: "https://media2.giphy.com/media/20G9uNqE3K4dRjCppA/source.gif",
-          votes: 0,
-        },
-        {
-          id: 4,
-          name: "Dr. Lion",
-          image:
-            "http://bestanimations.com/Animals/Mammals/Cats/Lions/animated-lion-gif-11.gif",
-          votes: 0,
-        },
-        {
-          id: 5,
-          name: "Mme. Panda",
-          image: "https://media.giphy.com/media/ALalVMOVR8Qw/giphy.gif",
-          votes: 0,
-        },
-      ],
-    }),
+// Fetch data from db.json
+fetch('db.json')
+  .then(response => response.json())
+  .then(data => {
+    const characters = data.characters;
+    displayCharacters(characters);
   })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log("Database reset successfully:", data);
-    })
-    .catch((error) => {
-      console.error("There was a problem resetting the database:", error);
-    });
-}
-//add new items to the db
-const form = document.getElementById("character-form");
+  .catch(error => console.error('Error:', error));
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
+// Display characters in the character bar
+function displayCharacters(characters) {
+  const characterBar = document.getElementById('character-bar');
 
-  const formData = new FormData(form);
-  const name = formData.get("name");
-  const imageUrl = formData.get("image-url");
-  const characterId=null;
-
-  const response = await fetch(`${apiUrl}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name, imageUrl }),
+  characters.forEach(character => {
+    const characterDiv = document.createElement('div');
+    characterDiv.textContent = character.name;
+    characterDiv.classList.add('character');
+    characterDiv.addEventListener('click', () => showCharacterInfo(character));
+    characterBar.appendChild(characterDiv);
   });
 
-  if (response.ok) {
-    alert("Character added successfully!");
-    form.reset();
-  } else {
-    alert("Failed to add character.");
-  }
-});
+  // Display the first character's info initially
+  showCharacterInfo(characters[0]);
+}
+
+// Display character's detailed information
+function showCharacterInfo(character) {
+  const detailedInfo = document.getElementById('detailed-info');
+  detailedInfo.innerHTML = `
+    <p id="name">${character.name}</p>
+    <img id="image" src="${character.image}" alt="${character.name}" />
+    <h4>Total Votes: <span id="vote-count">${character.votes}</span></h4>
+    <form id="votes-form">
+      <input type="text" placeholder="Enter Votes" id="votes" name="votes" />
+      <input type="submit" value="Add Votes" />
+    </form>
+    <button id="reset-btn">Reset Votes</button>
+  `;
+
+  // Add event listeners for form submission and reset button
+  const votesForm = document.getElementById('votes-form');
+  const resetBtn = document.getElementById('reset-btn');
+
+  votesForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const votesInput = document.getElementById('votes');
+    const newVotes = parseInt(votesInput.value, 10);
+
+    if (!isNaN(newVotes)) {
+      character.votes += newVotes;
+      document.getElementById('vote-count').textContent = character.votes;
+      votesInput.value = '';
+    }
+  });
+
+  resetBtn.addEventListener('click', () => {
+    character.votes = 0;
+    document.getElementById('vote-count').textContent = character.votes;
+  });
+}
+
+
 
