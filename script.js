@@ -1,5 +1,5 @@
 // Your code here
-// Fetch data from db.json
+
 fetch('db.json')
   .then(response => response.json())
   .then(data => {
@@ -8,7 +8,7 @@ fetch('db.json')
   })
   .catch(error => console.error('Error:', error));
 
-// Display characters in the character bar
+
 function displayCharacters(characters) {
   const characterBar = document.getElementById('character-bar');
 
@@ -20,11 +20,11 @@ function displayCharacters(characters) {
     characterBar.appendChild(characterDiv);
   });
 
-  // Display the first character's info initially
+  // Display Mr cute
   showCharacterInfo(characters[0]);
 }
 
-// Display character's detailed information
+
 function showCharacterInfo(character) {
   const detailedInfo = document.getElementById('detailed-info');
   detailedInfo.innerHTML = `
@@ -38,7 +38,7 @@ function showCharacterInfo(character) {
     <button id="reset-btn">Reset Votes</button>
   `;
 
-  // Add event listeners for form submission and reset button
+  
   const votesForm = document.getElementById('votes-form');
   const resetBtn = document.getElementById('reset-btn');
 
