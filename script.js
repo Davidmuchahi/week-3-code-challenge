@@ -1,4 +1,4 @@
-// Your code here
+//write ur code
 
 fetch('db.json')
   .then(response => response.json())
